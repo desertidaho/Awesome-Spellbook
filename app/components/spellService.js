@@ -7,16 +7,22 @@ let _spellApi = axios.create({
     baseURL: ''
 })
 
+let _sandboxApi = axios.create({
+    baseURL: 'https://bcw-sandbox.herokuapp.com/api/Brett/spells/'
+})
+
 let _state = {
     spellsApi: [],
     activeSpell: {},
-    mySpellBook: []
+    mySpellBook: [],
+    myActiveSpell: {}
 }
 
 let _subscribers = {
     spellsApi: [],
     activeSpell: [],
-    mySpellBook: []
+    mySpellBook: [],
+    myActiveSpell: []
 }
 
 function setState(prop, data) {
@@ -41,6 +47,10 @@ export default class SpellService {
         return _state.mySpellBook.map(s => new Spell(s))
     }
 
+    get MyActiveSpell() {
+        return _state.myActiveSpell
+    }
+
     getSpellData() {
         _spellApi.get(formatUrl('http://dnd5eapi.co/api/spells/'))
             .then(res => {
@@ -61,11 +71,42 @@ export default class SpellService {
         setState('activeSpell', spell)
     }
 
-    addSpell() {
-        let spell = _state.mySpellBook.find(s => s.name == _state.activeSpell.name)
-        if (!spell) {
-            _state.mySpellBook.push(_state.activeSpell)
-            _subscribers.mySpellBook.forEach(fn => fn())
+    addSpellToMySpellBook(name) {
+        let check = _state.mySpellBook.find(s => s.name == _state.activeSpell.name)
+        if (!check) {
+            let spell = _state.activeSpell
+            _sandboxApi.post('', spell)
+                .then(res => {
+                    this.mySpellBookData()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
         }
     }
+
+    mySpellBookData() {
+        _sandboxApi.get()
+            .then(res => {
+                let data = res.data.data.map(s => new Spell(s))
+                setState('mySpellBook', data)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
+
+    showMySpellBookDetails(_id) {
+        let data = _state.mySpellBook.find(s => s._id == _id)
+        setState('myActiveSpell', data)
+    }
+
+    deleteFromMySpellBook(_id) {
+        _sandboxApi.delete(_id)
+            .then(res => {
+                this.mySpellBookData()
+                setState('myActiveSpell', '')
+            })
+    }
+
 }

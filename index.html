@@ -12,21 +12,31 @@
 </head>
 
 <body>
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-4">
-                <ul id="api-spells">
-                    <!-- list here -->
-                </ul>
+    <div class="container-fluid">
+
+        <header class="row">
+            <div class="col">
+                <h1 class="text-center mt-4">Dungeons and Dragons</h1>
             </div>
-            <div id="active-spell" class="col-4">
-                <!-- active here -->
+        </header>
+
+        <section>
+            <div class="row mt-5">
+                <div class="col-3 offset-1">
+                    <ul id="api-spells">
+                        <!-- list here -->
+                    </ul>
+                </div>
+                <div id="active-spell" class="col-4">
+                    <!-- active here -->
+                </div>
+                <div id="my-spellbook" class="col-3 offset-1">
+                    <!-- spellbook here -->
+                </div>
             </div>
-            <div id="my-spellbook" class="col-4">
-                <!-- spellbook here -->
-            </div>
-        </div>
-    </section>
+        </section>
+
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
     <script type="module" src="app/main.js"></script>
