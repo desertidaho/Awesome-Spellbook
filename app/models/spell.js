@@ -35,7 +35,7 @@ export default class Spell {
                               <p class="card-text">${this.description}</p>
                               <p class="card-text">Page: ${this.page}</p>
                               <button class="btn btn-danger" onclick="app.controllers.spellController.deleteFromMySpellBook('${this._id}')">Delete From Spellbook</button>
-                            </div>
+                              </div>
                           </div>
         `
   }
